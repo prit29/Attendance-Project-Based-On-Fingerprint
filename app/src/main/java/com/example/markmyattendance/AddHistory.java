@@ -1,15 +1,16 @@
 package com.example.markmyattendance;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.SearchView;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.BaseAdapter;
-import android.widget.ListView;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,13 +20,17 @@ public class AddHistory extends AppCompatActivity {
     DatabaseHandler db;
     List<RecordClass> studentRecord = new ArrayList<>();
     List<RecordClass> studentRecord2 = new ArrayList<>();
-    ListView l1;
+    RecyclerView l1;
+    TextView t1;
+    private Adapter newCustom;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_history);
 
         l1 = findViewById(R.id.list5);
+        t1 = findViewById(R.id.t1);
+        l1.setLayoutManager(new LinearLayoutManager(this));
         db = new DatabaseHandler(this);
         studentRecord = db.getAllRecord();
 
@@ -42,11 +47,38 @@ public class AddHistory extends AppCompatActivity {
             }
         }
 
-        custom newCustom = new custom();
+        t1.setText("Total : " + studentRecord2.size());
+
+        newCustom = new Adapter(studentRecord2);
         l1.setAdapter(newCustom);
     }
 
-    class custom extends BaseAdapter {
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater =  getMenuInflater();
+        inflater.inflate(R.menu.example_item,menu);
+
+        MenuItem searchItem = menu.findItem(R.id.action_search);
+        SearchView searchView = (SearchView) searchItem.getActionView();
+
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String s) {
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String s) {
+                newCustom.getFilter().filter(s);
+                t1.setText("Total : "+newCustom.getItemCount());
+                return false;
+            }
+        });
+
+        return true;
+    }
+
+    /*class custom extends BaseAdapter {
 
         @Override
         public int getCount() {
@@ -84,5 +116,5 @@ public class AddHistory extends AppCompatActivity {
 
             return convertView;
         }
-    }
+    }*/
 }
