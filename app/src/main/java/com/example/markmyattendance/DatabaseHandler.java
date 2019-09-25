@@ -15,6 +15,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     private static final String TABLE_CLASS = "class";
     private static final String TABLE_STUDENT = "student";
     private static final String TABLE_RECORD = "record";
+    private static final String TABLE_TIME = "time";
     private static final String KEY_ID = "id";
     private static final String KEY_NAME = "name";
     private static final String KEY_ROLL = "roll";
@@ -23,6 +24,12 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     private static final String KEY_TIME = "time";
     private static final String KEY_LECT = "lect";
     private static final String KEY_STATUS = "status";
+    private static final String KEY_DAY = "day";
+    private static final String KEY_STARTH = "starth";
+    private static final String KEY_STARTM = "startm";
+    private static final String KEY_ENDH = "endh";
+    private static final String KEY_ENDM = "endm";
+    private static final String KEY_SUB = "sub";
 
     public DatabaseHandler(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -42,9 +49,15 @@ public class DatabaseHandler extends SQLiteOpenHelper {
                 + KEY_ID + " INTEGER PRIMARY KEY," + KEY_ROLL + " TEXT,"
                 + KEY_NAME + " TEXT," + KEY_CLASS + " TEXT," + KEY_LINE + " TEXT," + KEY_LECT + " TEXT," + KEY_STATUS + " TEXT," + KEY_TIME + " TEXT" + ")";
 
+        String CREATE_TIME_TABLE= "CREATE TABLE " + TABLE_TIME + "( "
+                + KEY_ID + " INTEGER PRIMARY KEY," + KEY_CLASS + " TEXT,"
+                + KEY_LINE + " TEXT," + KEY_DAY + " TEXT," + KEY_STARTH + " INTEGER," + KEY_STARTM + " INTEGER," + KEY_ENDH + " INTEGER," + KEY_ENDM + " INTEGER," + KEY_SUB + " TEXT" + ")";
+
+
         db.execSQL(CREATE_CLASS_TABLE);
         db.execSQL(CREATE_STUDENT_TABLE);
         db.execSQL(CREATE_RECORD_TABLE);
+        db.execSQL(CREATE_TIME_TABLE);
     }
 
     @Override
@@ -55,6 +68,8 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_STUDENT);
         onCreate(db);
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_RECORD);
+        onCreate(db);
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_TIME);
         onCreate(db);
     }
 
@@ -80,6 +95,22 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         values.put(KEY_STATUS,recordClass.getStatus());
         values.put(KEY_TIME,recordClass.getTime());
         db.insert(TABLE_RECORD, null, values);
+        db.close();
+    }
+
+    void addTimeTable(TimeTable recordClass) {
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        ContentValues values = new ContentValues();
+        values.put(KEY_CLASS, recordClass.getStd());
+        values.put(KEY_LINE,recordClass.getLine());
+        values.put(KEY_DAY, recordClass.getDay());
+        values.put(KEY_STARTH, recordClass.getStarth());
+        values.put(KEY_STARTM, recordClass.getStartm());
+        values.put(KEY_ENDH,recordClass.getEndh());
+        values.put(KEY_ENDM,recordClass.getEndm());
+        values.put(KEY_SUB,recordClass.getSub());
+        db.insert(TABLE_TIME, null, values);
         db.close();
     }
 
@@ -137,6 +168,33 @@ public class DatabaseHandler extends SQLiteOpenHelper {
                 studentList.setLect(cursor.getString(5));
                 studentList.setStatus(cursor.getString(6));
                 studentList.setTime(cursor.getString(7));
+                contactList.add(studentList);
+            } while (cursor.moveToNext());
+        }
+        return contactList;
+    }
+
+    public List<TimeTable> getAllTimeTable() {
+        List<TimeTable> contactList = new ArrayList<TimeTable>();
+
+        String selectQuery = "SELECT  * FROM " + TABLE_TIME;
+
+        SQLiteDatabase db = this.getWritableDatabase();
+        Cursor cursor = db.rawQuery(selectQuery, null);
+
+        // looping through all rows and adding to list
+        if (cursor.moveToFirst()) {
+            do {
+                TimeTable studentList = new TimeTable();
+                studentList.setDay(cursor.getString(3));
+                studentList.setStarth(Integer.valueOf(cursor.getString(4)));
+                studentList.setStd(cursor.getString(1));
+                studentList.setLine(cursor.getString(2));
+                studentList.setId(Integer.parseInt(cursor.getString(0)));
+                studentList.setStartm(Integer.valueOf(cursor.getString(5)));
+                studentList.setEndh(Integer.valueOf(cursor.getString(6)));
+                studentList.setEndm(Integer.valueOf(cursor.getString(7)));
+                studentList.setSub(cursor.getString(8));
                 contactList.add(studentList);
             } while (cursor.moveToNext());
         }

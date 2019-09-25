@@ -44,4 +44,15 @@
         android:background="@drawable/back_round"
         android:textColor="#fff"/>
 
+    <Button
+        android:id="@+id/b4"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="ADD TIME-TABLE"
+        android:layout_marginLeft="24dp"
+        android:layout_marginRight="24dp"
+        android:layout_marginTop="8dp"
+        android:background="@drawable/back_round"
+        android:textColor="#fff"/>
+
 </LinearLayout>

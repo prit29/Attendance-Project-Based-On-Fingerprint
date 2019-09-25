@@ -9,19 +9,33 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".AddAttendance3"
-            android:label="Add Subject"/>
-        <activity android:name=".AddHistory"
-            android:label="Attendance History"/>
-        <activity android:name=".AddAttendance2"
-            android:label="Mark Attendance"/>
-        <activity android:name=".AddAttendance"
-            android:label="Mark Attendance"
-            />
-        <activity android:name=".RegisterClass"
-            android:label="Student List"/>
-        <activity android:name=".Register"
-            android:label="Student Name"/>
+        <activity android:name=".CreateTime"
+            android:theme="@style/AppTheme.myback"
+            android:label="Create Time">
+        </activity>
+        <activity
+            android:name=".AddTime2"
+            android:label="@string/title_activity_add_time2"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name=".AddTime" />
+        <activity
+            android:name=".AddAttendance3"
+            android:label="Add Subject" />
+        <activity
+            android:name=".AddHistory"
+            android:label="Attendance History" />
+        <activity
+            android:name=".AddAttendance2"
+            android:label="Mark Attendance" />
+        <activity
+            android:name=".AddAttendance"
+            android:label="Mark Attendance" />
+        <activity
+            android:name=".RegisterClass"
+            android:label="Student List" />
+        <activity
+            android:name=".Register"
+            android:label="Student Name" />
         <activity
             android:name=".AddStudent"
             android:label="Add Student"
@@ -34,7 +48,9 @@
             android:name=".AddClass"
             android:label="Add Class"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".MainActivity" android:theme="@style/AppTheme.NoActionBar">
+        <activity
+            android:name=".MainActivity"
+            android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
